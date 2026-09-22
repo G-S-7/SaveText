@@ -51,9 +51,7 @@ const HomePage = () => {
         const { data } = await api.post("/", {}, { withCredentials: true });
         const { status, user } = data;
         setUsername(user);
-        if (status) {
-          toast(`Hello ${user}`, { position: "top-right" });
-        } else {
+        if (!status){
           removeCookie("token");
           navigate("/login");
         }

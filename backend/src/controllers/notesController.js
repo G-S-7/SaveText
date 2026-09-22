@@ -1,7 +1,8 @@
 import Note from '../models/Note.js';
 export async function getAllNotes(req, res){
     try{
-        const notes = await Note.find().sort({createdAt: -1});
+        const userId = req.user.id; 
+        const notes = await Note.find({userId}).sort({createdAt: -1});
         res.status(200).json(notes);
     }catch(err){
         res.status(500).json({message:"Error fetching notes", error: err.message});
@@ -20,8 +21,9 @@ export async function getNote(req, res){
 }
 export async function createNote(req, res){
     try{
+        const userId = req.user.id;
         const {title, content} = req.body;
-        const newNote = new Note({title, content});
+        const newNote = new Note({userId, title, content});
         await newNote.save();
         res.status(201).json(newNote);
     }catch(err){
